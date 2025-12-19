@@ -82,6 +82,33 @@ class PostController extends Controller
         return response()->json($post, 201);
     }
 
+    /**
+     * Display a single post.
+     *
+     * GET /api/posts/{id}
+     *
+     * Only active posts (not draft, already published) are retrievable.
+     * Returns 404 if the post does not exist, is a draft, or scheduled.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show($id)
+    {
+        $post = Post::with('user')
+            ->where('id', $id)
+            ->where('is_draft', false)
+            ->whereNotNull('published_at')
+            ->where('published_at', '<=', Carbon::now())
+            ->first();
+
+        if (!$post) {
+            return response()->json(['message' => 'Post not found'], 404);
+        }
+
+        return response()->json($post, 200);
+    }
+
 
 
 
