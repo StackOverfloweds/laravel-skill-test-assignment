@@ -1,0 +1,68 @@
+# ======================
+# Environment
+# ======================
+.env
+.env.*
+!.env.example
+.env.docker
+
+# ======================
+# Laravel Subproject
+# ======================
+laravel-skill-test/vendor/
+laravel-skill-test/node_modules/
+laravel-skill-test/public/build
+laravel-skill-test/public/hot
+laravel-skill-test/bootstrap/cache/*.php
+laravel-skill-test/storage/*.key
+laravel-skill-test/storage/framework/cache/*
+laravel-skill-test/storage/framework/sessions/*
+laravel-skill-test/storage/framework/testing/*
+laravel-skill-test/storage/framework/views/*
+laravel-skill-test/storage/logs/*
+
+# ======================
+# Node Modules (Root)
+# ======================
+node_modules/
+
+# ======================
+# SQLite Database
+# ======================
+laravel-skill-test/database/*.sqlite
+laravel-skill-test/database/*.db
+
+# ======================
+# Docker
+# ======================
+docker/.env
+docker/**/data
+docker/**/logs
+docker/**/storage
+
+# ======================
+# Logs & Cache
+# ======================
+*.log
+.phpunit.result.cache
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# ======================
+# IDE / Editor
+# ======================
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ======================
+# Build / Temp
+# ======================
+dist/
+build/
+tmp/
+temp/

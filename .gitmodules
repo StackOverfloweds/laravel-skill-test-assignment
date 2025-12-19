@@ -1,0 +1,3 @@
+[submodule "laravel-skill-test"]
+	path = laravel-skill-test
+	url = https://github.com/yuki817/laravel-skill-test
