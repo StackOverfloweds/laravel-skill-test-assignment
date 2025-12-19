@@ -165,6 +165,35 @@ class PostController extends Controller
         return response()->json($post, 200);
     }
 
+    /**
+     * Remove the specified post.
+     *
+     * DELETE /api/posts/{id}
+     *
+     * Only the post's author can delete the post.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function destroy(Request $request, $id)
+    {
+        $post = Post::find($id);
+
+        if (!$post) {
+            return response()->json(['message' => 'Post not found'], 404);
+        }
+
+        // Cek author
+        if ($request->user()->id !== $post->user_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $post->delete();
+
+        return response()->json(['message' => 'Post deleted'], 200);
+    }
+
+
 
 
 
