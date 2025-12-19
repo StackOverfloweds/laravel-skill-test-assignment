@@ -124,6 +124,48 @@ class PostController extends Controller
         return response()->json(['message' => 'posts.edit'], 200);
     }
 
+    /**
+     * Update the specified post.
+     *
+     * PUT/PATCH /api/posts/{id}
+     *
+     * Only the post's author can update the post.
+     * Validates submitted data before updating the post.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, $id)
+    {
+        $post = Post::find($id);
+
+        if (!$post) {
+            return response()->json(['message' => 'Post not found'], 404);
+        }
+
+        // Checkk author
+        if ($request->user()->id !== $post->user_id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        // Validation data
+        $request->validate([
+            'title' => 'sometimes|required|string|max:255',
+            'content' => 'sometimes|required|string',
+            'is_draft' => 'sometimes|boolean',
+            'published_at' => 'sometimes|date|nullable',
+        ]);
+
+        // Update only field
+        $post->update($request->only([
+            'title', 'content', 'is_draft', 'published_at'
+        ]));
+
+        return response()->json($post, 200);
+    }
+
+
 
 
 
