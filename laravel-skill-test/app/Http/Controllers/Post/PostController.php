@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+
+        public function __construct()
+    {
+        // Just user has been login that can access
+        $this->middleware('auth')->only(['store', 'update', 'destroy']);
+    }
+
     /**
      * Display a paginated list of active posts.
      *
@@ -31,20 +38,51 @@ class PostController extends Controller
     }
 
     /**
- * Show the form for creating a new post.
- *
- * GET /api/posts/create
- *
- * For API, this can just return a simple message.
- *
- * @return \Illuminate\Http\JsonResponse|string
- */
-public function create()
-{
-    // Bisa return string atau JSON
-    return response()->json(['message' => 'posts.create'], 200);
-    // Atau cukup:
-    // return 'posts.create';
-}
+     * Show the form for creating a new post.
+     *
+     * GET /api/posts/create
+     *
+     * For API, this can just return a simple message.
+     *
+     * @return \Illuminate\Http\JsonResponse|string
+     */
+    public function create()
+    {
+        return response()->json(['message' => 'posts.create'], 200);
+    }
+
+    /**
+     * Store a newly created post.
+     *
+     * POST /api/posts
+     *
+     * Only authenticated users can create posts (session-based auth).
+     * Validates submitted data before creating the post.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'is_draft' => 'sometimes|boolean',
+            'published_at' => 'sometimes|date|nullable',
+        ]);
+
+        $post = Post::create([
+            'user_id' => $request->user()->id, // get from session
+            'title' => $request->title,
+            'content' => $request->content,
+            'is_draft' => $request->input('is_draft', true),
+            'published_at' => $request->published_at,
+        ]);
+
+        return response()->json($post, 201);
+    }
+
+
+
 
 }
