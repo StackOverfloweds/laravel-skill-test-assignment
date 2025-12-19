@@ -1,18 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Post;
 
+use App\Http\Controllers\Controller;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class PostController extends Controller
 {
-
-        public function __construct()
-    {
-        // Just user has been login that can access
-        $this->middleware('auth')->only(['store', 'update', 'destroy']);
-    }
 
     /**
      * Display a paginated list of active posts.
@@ -64,19 +60,21 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        // Validasi input
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'is_draft' => 'sometimes|boolean',
             'published_at' => 'sometimes|date|nullable',
         ]);
 
+        // Buat post baru
         $post = Post::create([
-            'user_id' => $request->user()->id, // get from session
-            'title' => $request->title,
-            'content' => $request->content,
-            'is_draft' => $request->input('is_draft', true),
-            'published_at' => $request->published_at,
+            'user_id' => $request->user()->id,            // Get from session
+            'title' => $validated['title'],
+            'content' => $validated['content'],
+            'is_draft' => $validated['is_draft'] ?? true, // default draft true
+            'published_at' => $validated['published_at'] ?? null,
         ]);
 
         return response()->json($post, 201);
