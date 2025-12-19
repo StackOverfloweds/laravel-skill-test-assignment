@@ -109,6 +109,22 @@ class PostController extends Controller
         return response()->json($post, 200);
     }
 
+    /**
+     * Show the form for editing a post.
+     *
+     * GET /api/posts/{id}/edit
+     *
+     * For API, this can just return a simple message.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\JsonResponse|string
+     */
+    public function edit($id)
+    {
+        return response()->json(['message' => 'posts.edit'], 200);
+    }
+
+
 
 
 
